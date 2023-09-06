@@ -1,0 +1,21 @@
+---
+
+- block:
+
+    - name: Install docker All RPM
+      shell: "yum install -y {{ cri.package_path }}docker/*.rpm"
+
+    - name: start and enable containerd
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: yes
+  
+    - name: 拷贝 daemon.json
+      template:
+        src: daemon.json.j2
+        dest: "/etc/docker/daemon.json"
+      notify:
+        - reload docker
+
+  when: kubernetes_cri == 'docker'

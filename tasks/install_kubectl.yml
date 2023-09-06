@@ -1,0 +1,10 @@
+---
+- name: Install kubelet kubeadm kubectl
+  shell: yum install -y /data/deploy/kube/*.rpm
+  become: true
+  
+- name: start and enable kubelet
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes

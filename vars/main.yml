@@ -1,0 +1,20 @@
+---
+
+cri_socket_paths:
+  containerd: unix:///run/containerd/containerd.sock
+  docker: unix:///var/run/dockershim.sock
+
+cni_images:
+  cni: docker.io/calico/cni:v3.25.0
+  node: docker.io/calico/node:v3.25.0
+  kube-controllers: docker.io/calico/kube-controllers:v3.25.0
+
+# 离线安装 Docker
+cri: 
+  package_path: /tmp/package/
+  docker_package: docker-ce-19.03.13.zip
+  docker_registries: 1.1.1.1:8080
+
+kube:
+  package_path: /tmp/package/
+  kube_package: kube-v.1.25.zip

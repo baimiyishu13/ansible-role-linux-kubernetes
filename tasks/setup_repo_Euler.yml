@@ -1,0 +1,62 @@
+---
+
+- block:
+  - name: Set hostname
+    shell: hostnamectl set-hostname "{{ inventory_hostname }}"
+
+  - name: Add or Update /etc/hosts Entries
+    lineinfile:
+      path: /etc/hosts
+      line: "{{ item }}"
+    loop: "{{ host_entries.hosts }}"
+  when: set_hosts_entry == 'yes'
+
+- name: Install packages
+  ansible.builtin.package: 
+    name: 
+      - socat
+      - conntrack
+      - ebtables
+      - ipset
+      - ipvsadm
+      - bash-completion
+      - openssl
+      - openssl-devel
+      - unizp
+    state: present
+
+- block:
+    - name: Create docker directory
+      file:
+        path: "{{ cri.package_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy Docker RPM packages
+      copy:
+        src: "{{ cri.package_path }}{{ cri.docker_package }}"
+        dest: "{{ cri.package_path }}{{ cri.docker_package }}"
+        mode: 0644
+
+    - name: unzip Docker package
+      shell: "unzip {{ cri.package_path }}{{ cri.docker_package }} -d {{ cri.package_path }}docker/"
+      become: true
+  when: kubernetes_cri == 'docker'
+
+- block:
+    - name: Create kube directory
+      file:
+        path: "{{ kube.package_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Copy kube RPM packages
+      copy:
+        src: "{{ kube.package_path }}{{ kube.kube_package }}"
+        dest: "{{ kube.package_path }}{{ kube.kube_package }}"
+        mode: 0644
+
+    - name: unzip kube package
+      shell: "unzip {{ kube.package_path }}{{ kube.kube_package }} -d {{ kube.package_path }}kube"
+      become: true
+  when: kubernetes_version == '1.25'
