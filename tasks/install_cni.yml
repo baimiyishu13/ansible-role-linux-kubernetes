@@ -1,11 +1,11 @@
 ---
 - block:
     - name: Generate Calico YAML
-      ansible.builtin.template:
+      template:
         src: calico.yaml.j2
         dest: /tmp/calico.yaml
 
     - name: Apply Calico Configuration
-      ansible.builtin.shell: kubectl apply -f /tmp/calico.yaml
+      shell: kubectl apply -f /tmp/calico.yaml
 
   when: kubernetes_cni == 'cailco'

@@ -1,13 +1,13 @@
 ---
 
 - name: disable firewalld
-  ansible.builtin.systemd:
+  systemd:
     name: firewalld 
     state: stopped 
     enabled: no
 
 - name: Setenforce 0
-  ansible.builtin.command: /usr/sbin/setenforce 0  
+  command: /usr/sbin/setenforce 0  
   ignore_errors: true
 
 - name: Disable SELinux
@@ -17,16 +17,16 @@
     line: 'SELINUX=disabled'
 
 - name: Install openssl
-  ansible.builtin.package: 
+  package: 
     name: 
       - openssl
     state: present
     
 - name: load overlay kernel module
-  ansible.builtin.command: modprobe overlay
+  command: modprobe overlay
 
 - name: load br_netfilter kernel module
-  ansible.builtin.command: modprobe br_netfilter
+  command: modprobe br_netfilter
 
 - name: load kernel modules - persistent
   blockinfile:
@@ -47,10 +47,10 @@
       net.core.somaxconn                  = 65535
 
 - name: load br_netfilter kernel module
-  ansible.builtin.command: sysctl --system
+  command: sysctl --system
 
 - name: Disable SWAP
-  ansible.builtin.shell: |
+  shell: |
     swapoff -a
 
 - name: Disable SWAP in fstab

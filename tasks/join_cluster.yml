@@ -1,7 +1,7 @@
 ---
 
 - name: Check if /var/lib/kubelet directory exist
-  ansible.builtin.stat:
+  stat:
     path: /var/lib/kubelet
   register: kubelet_dir
 
@@ -73,22 +73,22 @@
 
 - block:
     - name: render  kubeadm-join-master.yml
-      ansible.builtin.template:
+      template:
         src: kubeadm-join-master.yml.j2
         dest: /root/kubeadm-join-master.yml
     
     - name: Cluster join - master
-      ansible.builtin.command: kubeadm join --config /root/kubeadm-join-master.yml
+      command: kubeadm join --config /root/kubeadm-join-master.yml
       register: kubeadm_join
       changed_when: kubeadm_join is success
 
     - name: Create ~/.kube directory
-      ansible.builtin.file: 
+      file: 
         name: ~/.kube
         state: directory
     
     - name: Populate .kube/config file
-      ansible.builtin.copy: 
+      copy: 
         src: /etc/kubernetes/admin.conf
         dest: ~/.kube/config
         remote_src: yes
@@ -100,12 +100,12 @@
 
 - block:
     - name: render kubeadm-join-worker.yml
-      ansible.builtin.template:
+      template:
         src: kubeadm-join-worker.yml.j2
         dest: /root/kubeadm-join-worker.yml
     
     - name: Cluster join - worker
-      ansible.builtin.command: kubeadm join --config /root/kubeadm-join-worker.yml
+      command: kubeadm join --config /root/kubeadm-join-worker.yml
       register: kubeadm_join
       changed_when: kubeadm_join is success
   when:

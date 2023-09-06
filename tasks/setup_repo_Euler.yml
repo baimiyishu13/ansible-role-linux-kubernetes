@@ -12,7 +12,7 @@
   when: set_hosts_entry == 'yes'
 
 - name: Install packages
-  ansible.builtin.package: 
+  package: 
     name: 
       - socat
       - conntrack

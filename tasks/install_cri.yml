@@ -6,7 +6,7 @@
       shell: "yum install -y {{ cri.package_path }}docker/*.rpm"
 
     - name: start and enable containerd
-      ansible.builtin.systemd:
+      systemd:
         name: docker
         state: started
         enabled: yes

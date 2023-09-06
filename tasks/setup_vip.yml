@@ -8,12 +8,12 @@
   with_items: "{{ ansible_interfaces }}"
 
 - name: Create /etc/kubernetes/manifests/ directory
-  ansible.builtin.file: 
+  file: 
     name: /etc/kubernetes/manifests/
     state: directory
 
 - name: render kube-vip.yml
-  ansible.builtin.template:
+  template:
     src: kube-vip.yml.j2
     dest: /etc/kubernetes/manifests/kube-vip.yaml
   notify:

@@ -1,12 +1,11 @@
 ---
-
-- name: reload docker
-  ansible.builtin.systemd:
+- name: restart Docker
+  systemd:
     name: docker
     state: restarted
 
 - name: wait kube-vip - pause
-  ansible.builtin.pause:
+  pause:
     minutes: 1
   listen: "wait kube-vip"
 
