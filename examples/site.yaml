@@ -1,6 +1,5 @@
 ---
 - hosts: kubemaster
-  become: yes
   remote_user: vagrant
   roles: 
     - role: ansible-role-linux-kubernetes
@@ -8,7 +7,6 @@
     - vars.yaml
 
 - hosts: kubeworker 
-  become: yes
   remote_user: vagrant
   roles: 
     -  role: ansible-role-linux-kubernetes
